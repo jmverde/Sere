@@ -1,6 +1,7 @@
 import tkinter as tk
 import os
 
+import re
 
 # Globals
 
@@ -13,33 +14,62 @@ capis = set([])
 
 
 # nuestra bonita clase capitulos
+
+# file tiene que ser un string con una estructura de archivo de serie, con una
+#temporada y un capitulo
+
+#Siempre hay que verificar el campo true que es el que nos dice si tiene una
+# estructura valida de archivo
 class Capitulo:
 
     def __init__(self,file):
 
         self.filename = file
 
+
+        expre = re.compile("(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)")
+        
+        blocks = expre.match(file)
+
+        if blocks == None:
+            self.valid = False
+            print("hay un archivo que no vale",file)
+
+        else:
+            self.valid = True
+
+            self.show = blocks.groups()[0]
+            self.temp = blocks.groups()[1]
+            self.capi = blocks.groups()[2]
+            self.vers = blocks.groups()[3]
+            self.ext  = blocks.groups()[4]
+
+        
+
+
+
+
         # Vamos con las extensiones
 
 
-#       Este bloque mola un huevo, pero habra que reescribirlo con expresiones regulares 
-
-        bloque = list(file)
-
-        ext =[]
-
-        a = bloque.pop()
-
-        while not (a == "."):
-            ext.append(a)
-            a = bloque.pop()
-
-        ext.reverse()
-
-
-        #esto mola un huevo para unir, pero pos
-        self.ext = "".join(str(x) for x in ext)
-                
+###       Este bloque mola un huevo, pero habra que reescribirlo con expresiones regulares 
+##
+##        bloque = list(file)
+##
+##        ext =[]
+##
+##        a = bloque.pop()
+##
+##        while not (a == "."):
+##            ext.append(a)
+##            a = bloque.pop()
+##
+##        ext.reverse()
+##
+##
+##        #esto mola un huevo para unir, pero pos
+##        self.ext = "".join(str(x) for x in ext)
+##                
 
 
 
@@ -83,7 +113,8 @@ def procdir():
 
 def prueba():
     for capi in capis:
-        print (capi.filename, capi.ext)
+        if capi.valid:
+            print (capi.filename, capi.ext)
 
 
 
@@ -101,10 +132,6 @@ root = tk.Tk()
 root.title("SeRe")
 
 
-A=Capitulo("hola.hol")
-
-print (A.filename)
-print (A.ext)
 
 #creamos los botones
 
