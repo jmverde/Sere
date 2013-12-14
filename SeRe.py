@@ -5,9 +5,20 @@ import re
 
 # Globals
 
+NOMBRE_LOG = "./SeRe.log"
 
+SEP_TEMP = "S"
+SEP_CAPI = "C"
 
 # Inicializamos variables necesarias
+
+nserie="Simpsons"   #esto es temporal, habra que poner entrada para elegir
+
+
+# flags:
+
+flag_log = False
+flag_serie = True
 
 capis = set([])
 
@@ -97,7 +108,11 @@ def getdir():
 
 # mete en el set capis un Capitulo por cada archivo
 def procdir():
-    
+
+    global log
+
+    if not flag_log : return()
+
     base = os.listdir()
 
     for arch in base:
@@ -109,23 +124,64 @@ def procdir():
             capis.add(Capitulo(arch))
         
 
-    prueba()
+##def prueba():
+##    for capi in capis:
+##        if capi.valid:
+##            print (capi.filename, capi.show,capi.temp,capi.capi,capi.vers,capi.ext,)
+##
 
-def prueba():
+
+#   Por ahora ponemos el cambio de nombre solo en el log
+
     for capi in capis:
         if capi.valid:
-            print (capi.filename, capi.ext)
 
-
+            newname = nserie + SEP_TEMP + capi.temp + SEP_CAPI + capi.capi + "." + capi.ext           
+            log.write(capi.filename + " -> " + newname +"\n")
 
 # esta se usa a veces de placeholder    
 def test():
     print("test")
     
 
+def openlog():
+
+    global log
+    global flag_log
+
+# compruebo si ya esta abierto, y si lo esta lo cierro
+    try:
+      log
+    except NameError: 
+      pass
+    else:        
+      log.close()
 
 
-#acordarse de dropear los archivos ocultos (esos que empiezan por .
+#   Abro el que haria falta para este directorio
+    
+#    os.path.isfile("/etc/passwd")
+    log = open(NOMBRE_LOG,"w")
+    flag_log=True
+# TODO:  aqui hay que gestionar el si es viejo, para encender el undo
+
+
+
+
+def salir():
+    #compruebo si hay log abierto y si lo hay lo cierro 
+    global log
+    global root
+    try:
+      log
+    except NameError: 
+      pass
+    else:        
+      log.close()
+
+    root.destroy()
+
+
 
 # Y aqui empezamos el meollo del asunto
 root = tk.Tk()
@@ -137,10 +193,15 @@ root.title("SeRe")
 
 
 eledir = tk.Button(root, text='Elegir directorio', width=50,
-                   command=combine_funcs(getdir,procdir))
+                   command=combine_funcs(getdir,openlog))
 eledir.pack()
 
-bquit = tk.Button(root, text = 'Quit', width = 50, command = root.destroy)
+procdir = tk.Button(root, text='Procesar directorio', width=50,
+                   command=combine_funcs(test,procdir))
+
+procdir.pack()
+
+bquit = tk.Button(root, text = 'Quit', width = 50, command = salir)
 bquit.pack()
 
 root.mainloop()
