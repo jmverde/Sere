@@ -8,7 +8,7 @@ import re
 NOMBRE_LOG = "./SeRe.log"
 
 SEP_TEMP = "S"
-SEP_CAPI = "C"
+SEP_CAPI = "E"
 
 # Inicializamos variables necesarias
 
@@ -137,7 +137,11 @@ def procdir():
         if capi.valid:
 
             newname = nserie + SEP_TEMP + capi.temp + SEP_CAPI + capi.capi + "." + capi.ext           
+
+            os.rename(capi.filename,newname)
             log.write(capi.filename + " -> " + newname +"\n")
+
+
 
 # esta se usa a veces de placeholder    
 def test():
