@@ -1,5 +1,5 @@
 import tkinter as tk
-import os
+import os, os.path
 
 import re
 
@@ -9,6 +9,9 @@ NOMBRE_LOG = "./SeRe.log"
 
 SEP_TEMP = "S"
 SEP_CAPI = "E"
+
+
+REGEX_MODEL = "(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)"
 
 # Inicializamos variables necesarias
 
@@ -38,7 +41,7 @@ class Capitulo:
         self.filename = file
 
 
-        expre = re.compile("(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)")
+        expre = re.compile(REGEX_MODEL)
         
         blocks = expre.match(file)
 
@@ -120,28 +123,37 @@ def procdir():
 #   Ignoramos los archivos ocultos, por que hay un huevo por tanto mac
 #   Tambien ignoro las cosas que no tienen un punto (y que no van a ser archivos interesantes, y ademas nos clava la cosa)
         if (not(arch[0] == ".") and ("." in arch)):
-            print(arch)
             capis.add(Capitulo(arch))
         
 
-##def prueba():
-##    for capi in capis:
-##        if capi.valid:
-##            print (capi.filename, capi.show,capi.temp,capi.capi,capi.vers,capi.ext,)
-##
 
 
-#   Por ahora ponemos el cambio de nombre solo en el log
-
-    for capi in capis:
+    for capi in list(capis):
         if capi.valid:
 
             newname = nserie + SEP_TEMP + capi.temp + SEP_CAPI + capi.capi + "." + capi.ext           
 
-            os.rename(capi.filename,newname)
-            log.write(capi.filename + " -> " + newname +"\n")
+# compruebo que no este ya en el formato
+            if newname == capi.filename:
+                log.write("old  "+capi.filename+ "ya estaba en el formato"+"\n")
 
 
+# compruebo que el archivo destino no existe (para no pisarlo)
+            elif os.path.isfile(newname):
+                log.write("rep  "+ capi.filename+" el archivo objetivo ya existia"+"\n")
+            
+            else:
+                os.rename(capi.filename,newname)
+                log.write("mv   " +capi.filename + " -> " + newname +"\n")
+        
+# si no es valido lo logamos tambien
+        else:
+            log.write("not  " + capi.filename + "no me parece un capitulo"+"\n")
+# una vez hemos acabado con el lo sacamos del set por si queremos hacer varios directorios seguidos
+
+        capis.discard(capi)
+
+        
 
 # esta se usa a veces de placeholder    
 def test():
