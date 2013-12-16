@@ -16,7 +16,7 @@ SEP_TEMP = "S"
 SEP_CAPI = "E"
 
 
-REGEX_MODEL = "(.*)[S|T]([\d|\d\d])E(\d\d)(.*)\.(\w\w\w)"
+REGEX_MODEL = "(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)"
 
 #para las que tienen el formato con una x delante
 
