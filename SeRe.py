@@ -16,7 +16,12 @@ SEP_TEMP = "S"
 SEP_CAPI = "E"
 
 
-REGEX_MODEL = "(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)"
+REGEX_MODEL = "(.*)[S|T]([\d|\d\d])E(\d\d)(.*)\.(\w\w\w)"
+
+#para las que tienen el formato con una x delante
+
+#REGEX_MODEL = "(.*)([\d|\d\d])x(\d\d)(.*)\.(\w\w\w)"
+
 
 # Inicializamos variables necesarias
 
@@ -59,8 +64,13 @@ class Capitulo:
             self.valid = True
 
             self.show = blocks.groups()[0]
-            self.temp = blocks.groups()[1]
-            self.capi = blocks.groups()[2]
+
+            temp = blocks.groups()[1]
+            if len(temp) == 1:
+                 temp="0"+temp                       
+            self.temp = temp
+            
+            self.capi = blocks.groups()[2]            
             self.vers = blocks.groups()[3]
             self.ext  = blocks.groups()[4]
 

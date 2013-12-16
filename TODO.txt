@@ -1,3 +1,5 @@
+:-> probar las varias expresiones regulares automaticamente
+
 :-> Implement undo 
 
 :-> New gui layout with grid
