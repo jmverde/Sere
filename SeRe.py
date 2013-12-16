@@ -16,11 +16,25 @@ SEP_TEMP = "S"
 SEP_CAPI = "E"
 
 
-REGEX_MODEL = "(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)"
+modelos = set([])
+
+#REGEX_MODEL = "(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)"
+
+modelos.add("(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)")
 
 #para las que tienen el formato con una x delante
 
 #REGEX_MODEL = "(.*)([\d|\d\d])x(\d\d)(.*)\.(\w\w\w)"
+
+modelos.add("(.*)([\d|\d\d])x(\d\d)(.*)\.(\w\w\w)")
+
+
+expres=set([])
+
+for mod in modelos:
+
+    expres.add(re.compile(mod))
+
 
 
 # Inicializamos variables necesarias
@@ -46,33 +60,34 @@ capis = set([])
 # estructura valida de archivo
 class Capitulo:
 
-    def __init__(self,file):
+    def __init__(self,file,expres):
 
         self.filename = file
 
-
-        expre = re.compile(REGEX_MODEL)
+        for expre in expres:
         
-        blocks = expre.match(file)
+        
+            blocks = expre.match(file)
 
 # chequea si cumple el regex y si no lo marca como no valido 
 
-        if blocks == None:
-            self.valid = False
+            if blocks == None:
+                self.valid = False
 
-        else:
-            self.valid = True
+            else:
+                self.valid = True
 
-            self.show = blocks.groups()[0]
+                self.show = blocks.groups()[0]
 
-            temp = blocks.groups()[1]
-            if len(temp) == 1:
-                 temp="0"+temp                       
-            self.temp = temp
+                temp = blocks.groups()[1]
+                if len(temp) == 1:
+                     temp="0"+temp                       
+                self.temp = temp
             
-            self.capi = blocks.groups()[2]            
-            self.vers = blocks.groups()[3]
-            self.ext  = blocks.groups()[4]
+                self.capi = blocks.groups()[2]            
+                self.vers = blocks.groups()[3]
+                self.ext  = blocks.groups()[4]
+                break
 
         
 
@@ -142,7 +157,7 @@ def procdir():
 #   Ignoramos los archivos ocultos, por que hay un huevo por tanto mac
 #   Tambien ignoro las cosas que no tienen un punto (y que no van a ser archivos interesantes, y ademas nos clava la cosa)
         if (not(arch[0] == ".") and ("." in arch)):
-            capis.add(Capitulo(arch))
+            capis.add(Capitulo(arch,expres))
         
 
 
