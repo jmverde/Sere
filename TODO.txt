@@ -1,0 +1,3 @@
+:-> Implement undo 
+
+:-> New gui layout with grid
