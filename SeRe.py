@@ -1,5 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import tkinter as tk
 import os, os.path
+
+import codecs  #evitar problemas escribiendo el log
 
 import re
 
@@ -187,7 +192,11 @@ def openlog():
 
 #   Abro el que haria falta para este directorio
     
-    log = open(NOMBRE_LOG,"a")
+#    log = open(NOMBRE_LOG,"a")
+# a ver si evitamos problema con los nombres de archivo
+
+    log=codecs.open(NOMBRE_LOG, "a", "utf-8-sig")
+
     flag_log=True
 # TODO:  aqui hay que gestionar el si es viejo, para encender el undo
 
