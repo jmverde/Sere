@@ -15,13 +15,13 @@ REGEX_MODEL = "(.*)[S|T](\d\d)E(\d\d)(.*)\.(\w\w\w)"
 
 # Inicializamos variables necesarias
 
-nserie="Simpsons"   #esto es temporal, habra que poner entrada para elegir
+nserie=""   #esto es temporal, habra que poner entrada para elegir
 
 
 # flags:
 
 flag_log = False
-flag_serie = True
+flag_serie = False
 
 capis = set([])
 
@@ -45,9 +45,10 @@ class Capitulo:
         
         blocks = expre.match(file)
 
+# chequea si cumple el regex y si no lo marca como no valido 
+
         if blocks == None:
             self.valid = False
-            print("hay un archivo que no vale",file)
 
         else:
             self.valid = True
@@ -114,7 +115,10 @@ def procdir():
 
     global log
 
-    if not flag_log : return()
+    if not(flag_serie):
+        return()
+
+    openlog()
 
     base = os.listdir()
 
@@ -135,7 +139,7 @@ def procdir():
 
 # compruebo que no este ya en el formato
             if newname == capi.filename:
-                log.write("old  "+capi.filename+ "ya estaba en el formato"+"\n")
+                log.write("old  "+capi.filename+ " ya estaba en el formato"+"\n")
 
 
 # compruebo que el archivo destino no existe (para no pisarlo)
@@ -148,10 +152,12 @@ def procdir():
         
 # si no es valido lo logamos tambien
         else:
-            log.write("not  " + capi.filename + "no me parece un capitulo"+"\n")
+            log.write("not  " + capi.filename + " no me parece un capitulo"+"\n")
 # una vez hemos acabado con el lo sacamos del set por si queremos hacer varios directorios seguidos
 
         capis.discard(capi)
+
+    closelog()
 
         
 
@@ -165,21 +171,55 @@ def openlog():
     global log
     global flag_log
 
-# compruebo si ya esta abierto, y si lo esta lo cierro
-    try:
-      log
-    except NameError: 
-      pass
-    else:        
-      log.close()
+    
+    if flag_log:
+        closelog()
+
+### Esto funcionaba bien, pero es mas comodo usarlo con un flag
+### compruebo si ya esta abierto, y si lo esta lo cierro
+##    try:
+##      log
+##    except NameError: 
+##      pass
+##    else:        
+##      log.close()
 
 
 #   Abro el que haria falta para este directorio
     
-#    os.path.isfile("/etc/passwd")
-    log = open(NOMBRE_LOG,"w")
+    log = open(NOMBRE_LOG,"a")
     flag_log=True
 # TODO:  aqui hay que gestionar el si es viejo, para encender el undo
+
+
+def closelog():
+    
+    global log
+    global flag_log
+
+    if flag_log:
+        log.close()
+
+    flag_log = False    
+
+### esto era chulo pero creo que no hace falta ta
+### compruebo si ya esta abierto, y si lo esta lo cierro
+##    try:
+##      log
+##    except NameError: 
+##      pass
+##    else:        
+##      log.close()
+
+
+
+def aceptar():
+
+    global nserie, label_nombre,flag_serie
+
+    nserie = cuadro_nom.get()
+    label_nombre.config(text=("Nombre base: "+nserie))
+    flag_serie = True
 
 
 
@@ -188,13 +228,10 @@ def salir():
     #compruebo si hay log abierto y si lo hay lo cierro 
     global log
     global root
-    try:
-      log
-    except NameError: 
-      pass
-    else:        
-      log.close()
 
+    if flag_log:
+        log.close()
+    
     root.destroy()
 
 
@@ -206,16 +243,28 @@ root.title("SeRe")
 
 
 #creamos los botones
-
+#en algun momento hay que dejarlo con grid
 
 eledir = tk.Button(root, text='Elegir directorio', width=50,
-                   command=combine_funcs(getdir,openlog))
+                   command=getdir)
 eledir.pack()
 
 procdir = tk.Button(root, text='Procesar directorio', width=50,
                    command=combine_funcs(test,procdir))
 
 procdir.pack()
+
+cuadro_nom = tk.Entry(root)
+
+cuadro_nom.pack()
+
+acept=tk.Button(root, text='Aceptar', width=50,
+                   command=aceptar)
+
+acept.pack()
+
+label_nombre =tk.Label(root,text="elija un nombre base")
+label_nombre.pack() 
 
 bquit = tk.Button(root, text = 'Quit', width = 50, command = salir)
 bquit.pack()
