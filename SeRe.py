@@ -145,7 +145,12 @@ def procdir():
 
     global log
 
-    if not(flag_serie):
+
+#    Cojo el nombre base, y si esta en blanco paso de seguir
+
+    nserie = cuadro_nom.get()
+
+    if nserie =="":
         return()
 
     openlog()
@@ -246,19 +251,20 @@ def closelog():
 ##      log.close()
 
 
+# ESTO SOBRA YA
+##def aceptar():
+##
+##    global nserie, label_nombre,flag_serie
+##
+##    nserie = cuadro_nom.get()
+##    label_nombre.config(text=("Nombre base: "+nserie))
+##    flag_serie = True
 
-def aceptar():
-
-    global nserie, label_nombre,flag_serie
-
-    nserie = cuadro_nom.get()
-    label_nombre.config(text=("Nombre base: "+nserie))
-    flag_serie = True
 
 
 def update_labeldir():
 
-    label_dir.config(text=("directorio activo"+os.getcwd()))
+    label_dir.config(text=("directorio activo  "+os.getcwd()))
 
 
 
@@ -288,8 +294,8 @@ eledir = tk.Button(root, text='Elegir directorio',
                    command=combine_funcs(getdir,update_labeldir))
 #eledir.pack()
 
-
-label_dir = tk.Label(root,text="directorio activo"+os.getcwd())
+label_dirt= tk.Label(root,text="Directorio Actual:")
+label_dir = tk.Label(root,text=os.getcwd())
 
 #label_dir.pack()
 #width = 50
@@ -303,28 +309,34 @@ cuadro_nom = tk.Entry(root)
 
 #cuadro_nom.pack()
 
-acept=tk.Button(root, text='Aceptar',
-                   command=aceptar)
+##acept=tk.Button(root, text='Aceptar',
+##                   command=aceptar)
 
 #acept.pack()
 
-label_nombre =tk.Label(root,text="elija un nombre base")
+label_nombre =tk.Label(root,text="Nombre base:")
 #label_nombre.pack() 
 
 bquit = tk.Button(root, text = 'Quit', command = salir)
 #bquit.pack()
 
 
-eledir.grid(row=0,column=1)
-label_dir.grid(row=0,column=0)
 
-cuadro_nom.grid(row=2,column=0)
-acept.grid(row=2,column=1)
 
-label_nombre.grid(row=1,columnspan=2)
 
-procdir.grid(row=3,columnspan=2)
 
-bquit.grid(row=4,columnspan=2)
+eledir.grid(row=0,column=2)
+label_dir.grid(row=0,column=1)
+label_dirt.grid(row=0,column=0)
+
+label_nombre.grid(row=2,column=0)
+cuadro_nom.grid(row=2,column=1)
+##acept.grid(row=2,column=1)
+
+#label_nombre.grid(row=1,columnspan=2)
+
+procdir.grid(row=2,column=2)
+
+bquit.grid(row=4,columnspan=3)
 
 root.mainloop()
