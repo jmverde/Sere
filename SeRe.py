@@ -284,33 +284,47 @@ root.title("SeRe")
 #creamos los botones
 #en algun momento hay que dejarlo con grid
 
-eledir = tk.Button(root, text='Elegir directorio', width=50,
+eledir = tk.Button(root, text='Elegir directorio', 
                    command=combine_funcs(getdir,update_labeldir))
-eledir.pack()
+#eledir.pack()
 
 
 label_dir = tk.Label(root,text="directorio activo"+os.getcwd())
 
-label_dir.pack()
+#label_dir.pack()
+#width = 50
 
-procdir = tk.Button(root, text='Procesar directorio', width=50,
+procdir = tk.Button(root, text='Procesar directorio', 
                    command=combine_funcs(test,procdir))
 
-procdir.pack()
+#procdir.pack()
 
 cuadro_nom = tk.Entry(root)
 
-cuadro_nom.pack()
+#cuadro_nom.pack()
 
-acept=tk.Button(root, text='Aceptar', width=50,
+acept=tk.Button(root, text='Aceptar',
                    command=aceptar)
 
-acept.pack()
+#acept.pack()
 
 label_nombre =tk.Label(root,text="elija un nombre base")
-label_nombre.pack() 
+#label_nombre.pack() 
 
-bquit = tk.Button(root, text = 'Quit', width = 50, command = salir)
-bquit.pack()
+bquit = tk.Button(root, text = 'Quit', command = salir)
+#bquit.pack()
+
+
+eledir.grid(row=0,column=1)
+label_dir.grid(row=0,column=0)
+
+cuadro_nom.grid(row=2,column=0)
+acept.grid(row=2,column=1)
+
+label_nombre.grid(row=1,columnspan=2)
+
+procdir.grid(row=3,columnspan=2)
+
+bquit.grid(row=4,columnspan=2)
 
 root.mainloop()
