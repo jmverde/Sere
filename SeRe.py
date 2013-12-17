@@ -256,6 +256,11 @@ def aceptar():
     flag_serie = True
 
 
+def update_labeldir():
+
+    label_dir.config(text=("directorio activo"+os.getcwd()))
+
+
 
 
 def salir():
@@ -280,8 +285,13 @@ root.title("SeRe")
 #en algun momento hay que dejarlo con grid
 
 eledir = tk.Button(root, text='Elegir directorio', width=50,
-                   command=getdir)
+                   command=combine_funcs(getdir,update_labeldir))
 eledir.pack()
+
+
+label_dir = tk.Label(root,text="directorio activo"+os.getcwd())
+
+label_dir.pack()
 
 procdir = tk.Button(root, text='Procesar directorio', width=50,
                    command=combine_funcs(test,procdir))
