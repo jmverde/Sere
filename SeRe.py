@@ -264,7 +264,7 @@ def closelog():
 
 def update_labeldir():
 
-    label_dir.config(text=("directorio activo  "+os.getcwd()))
+    label_dir.config(text=(os.getcwd()))
 
 
 
