@@ -175,19 +175,23 @@ def procdir():
 # compruebo que no este ya en el formato
             if newname == capi.filename:
                 log.write("old  "+capi.filename+ " ya estaba en el formato"+"\n")
+                salida_text("old  "+capi.filename+ " ya estaba en el formato"+"\n")
+
 
 
 # compruebo que el archivo destino no existe (para no pisarlo)
             elif os.path.isfile(newname):
                 log.write("rep  "+ capi.filename+" el archivo objetivo ya existia"+"\n")
-            
+                salida_text("rep  "+ capi.filename+" el archivo objetivo ya existia"+"\n")
             else:
                 os.rename(capi.filename,newname)
                 log.write("mv   " +capi.filename + " -> " + newname +"\n")
+                salida_text("mv   " +capi.filename + " -> " + newname +"\n") 
         
 # si no es valido lo logamos tambien
         else:
             log.write("not  " + capi.filename + " no me parece un capitulo"+"\n")
+            salida_text("not  " + capi.filename + " no me parece un capitulo"+"\n")
 # una vez hemos acabado con el lo sacamos del set por si queremos hacer varios directorios seguidos
 
         capis.discard(capi)
@@ -261,6 +265,10 @@ def closelog():
 ##    flag_serie = True
 
 
+def salida_text(mensaje):
+    global mensajes
+    mensajes.insert(tk.END,mensaje)
+
 
 def update_labeldir():
 
@@ -320,7 +328,8 @@ label_nombre =tk.Label(root,text="Nombre base:")
 bquit = tk.Button(root, text = 'Quit', command = salir)
 #bquit.pack()
 
-
+mensajes = tk.Text(root, height=3, width=90)
+# El disabled hace que no se pueda escribir en el desde el teclado,state="disabled"
 
 
 
@@ -337,6 +346,10 @@ cuadro_nom.grid(row=2,column=1)
 
 procdir.grid(row=2,column=2)
 
+mensajes.grid(row=3,columnspan=3)
+
+
 bquit.grid(row=4,columnspan=3)
+
 
 root.mainloop()
